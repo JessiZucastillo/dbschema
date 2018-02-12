@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts" : {
+    "dev" : "node queries.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "mongoose": "^5.0.4",

@@ -34,7 +34,7 @@ const employeeSchema = new Schema ({
   password : {
    type : String,
    required : true,
-   minlength : 6,
+   minlength : 8,
    select : false
   }
 }, schemaOptions);
@@ -53,6 +53,39 @@ employeeSchema.pre('save', function (next) {
   });
 
 });
+
+employeeSchema.pre('findOneAndUpdate', function (next) {
+  const { password } = this.getUpdate().$set;
+
+  if (!password) { return next(); }
+
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hashedPassword) => {
+      this.getUpdate().$set.password = hashedPassword;
+      next();
+    });
+  });
+
+});
+
+
+// employeeSchema.pre('findOneAndUpdate', function (next) {
+//   console.log('UPDATE HOOK')
+//   const user = this;
+//   console.log('USEr', JSON.stringify(user, null, 2))
+//   if (!user.isModified('password')) {
+//     console.log('Test')
+//     return next();
+//   }
+//   console.log('UPDATE HASHING PASSWORD')
+//   bcrypt.genSalt(10, (err, salt) => {
+//     bcrypt.hash(user.password, salt, (err, hashedPassword) => {
+//       user.password = hashedPassword;
+//       next();
+//     });
+//   });
+//
+// });
 
 
 module.exports = mongoose.model('Employee', employeeSchema);

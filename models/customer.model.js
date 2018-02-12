@@ -23,7 +23,7 @@ const addressSchema = new Schema ({
   country : {
     type : String,
     required : true
-  },
+  }
 });
 
 const customerSchema = new Schema ({
